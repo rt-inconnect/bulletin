@@ -1,0 +1,127 @@
+<div ng-controller="Bulletin as bulletin">
+  <div class="controls col-sm-3">
+    <form class="form-horizontal" ng-submit="bulletin.save()">
+      <fieldset>
+        <legend>Редактирование бюллетени</legend>
+        <div class="form-group">
+          <label for="date" class="col-lg-2 control-label">Выберите месяц и год</label>
+          <div class="col-lg-10">
+            <input type="text" class="form-control" id="date"
+              bs-datepicker
+              data-animation="am-flip-x"
+              min-view="1"
+              date-format="MMMM yyyy"
+              ng-model="selects.date"
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cover" class="col-lg-2 control-label">Обложка бюллетени</label>
+          <div class="col-lg-10">
+            <input type="file" class="form-control" id="cover"
+              nv-file-select
+              uploader="bulletin.uploader"
+            />
+          </div>
+        </div>        
+        <div class="form-group" ng-repeat="basin in bulletin.basins">
+          <label for="{{ 'b' + basin.id }}" class="col-lg-2 control-label">{{ 'Анализ ' + basin.name }}</label>
+          <div class="col-lg-10">
+            <text-angular ng-model="bulletin.pdf.analyzes[basin.id].content"></text-angular>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-lg-10 col-lg-offset-2">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+
+  <div class="bulletin">
+
+    <div class="bulletin-page bulletin-page-cover">
+      <img class="img-responsive" ng-src="{{ bulletin.pdf.cover }}" ng-if="bulletin.pdf.cover" />
+      <h2>Информационный бюллетень <br/>
+        раннего оповещения<br/>
+        по вопросам управления водными ресурсами трансграничных рек<br/>
+        бассейна Аральского моря
+      </h2>
+      <h3>{{ bulletin.pdfText }}</h3>
+      <div class="bulletin-page-footer">
+        <img src="/images/unrcca.jpg" />
+        <img src="/images/icwc.jpg" />
+      </div>
+    </div>
+
+    <div class="bulletin-basin" ng-repeat="basin in bulletin.basins">
+      <div class="bulletin-basin-content">
+        <h4>{{ bulletin.analysisText }}</h4>
+        <div ng-bind-html="bulletin.pdf.analyzes[basin.id].content"></div>
+        <div ng-repeat="category in bulletin.datas" class="category">
+          <div class="category-header row">
+            <div class="category-img col-xs-2">
+              <div class="bg-success category-img-bg">
+                <img ng-src="{{ category.cover }}" class="img-responsive" ng-if="category.cover" />
+              </div>
+            </div>
+            <div class="category-name col-xs-10 bg-primary">{{ category.name }}</div>
+          </div>
+
+          <div class="category-content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th rowspan="2">Объект</th>
+                  <th rowspan="2">Параметр</th>
+                  <th rowspan="2">Ед.изм</th>
+                  <th rowspan="2">Тип</th>
+                  <th colspan="3">{{ bulletin.month.first }}</th>
+                  <th colspan="3">{{ bulletin.month.second }}</th>
+                </tr>
+                <tr>
+                  <th>I</th>
+                  <th>II</th>
+                  <th>III</th>
+                  <th>I</th>
+                  <th>II</th>
+                  <th>III</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat-start="obj in category.objs" ng-if="obj.basinId == basin.id">
+                  <td rowspan="{{ obj.rowspan + 1 }}">{{ obj.name }}</td>
+                </tr>
+                  <tr ng-repeat-start="param in obj.params" ng-if="obj.basinId == basin.id">
+                    <td rowspan="{{param.paramId.withTypes ? 2 : 1}}">{{ param.paramId.name }}</td>
+                    <td rowspan="{{param.paramId.withTypes ? 2 : 1}}">{{ param.paramId.measure }}</td>
+                    <td>Факт</td>
+                    <td>{{ bulletin.avg('first', param.avg.first.fact, 0) }}</td>
+                    <td>{{ bulletin.avg('first', param.avg.first.fact, 1) }}</td>
+                    <td>{{ bulletin.avg('first', param.avg.first.fact, 2) }}</td>
+                    <td>{{ bulletin.avg('second', param.avg.second.fact, 0) }}</td>
+                    <td>{{ bulletin.avg('second', param.avg.second.fact, 1) }}</td>
+                    <td>{{ bulletin.avg('second', param.avg.second.fact, 2) }}</td>
+                  </tr>
+                  <tr ng-repeat-end ng-if="obj.basinId == basin.id && param.paramId.withTypes">
+                    <td>Прогноз</td>
+                    <td>{{ bulletin.avg('first', param.avg.first.plan, 0) }}</td>
+                    <td>{{ bulletin.avg('first', param.avg.first.plan, 1) }}</td>
+                    <td>{{ bulletin.avg('first', param.avg.first.plan, 2) }}</td>
+                    <td>{{ bulletin.avg('second', param.avg.second.plan, 0) }}</td>
+                    <td>{{ bulletin.avg('second', param.avg.second.plan, 1) }}</td>
+                    <td>{{ bulletin.avg('second', param.avg.second.plan, 2) }}</td>
+                  </tr>
+                <tr ng-repeat-end ng-hide="true" ng-if="obj.basinId == basin.id"></tr>
+              </tbody>
+            </table>
+
+            <chart-directive days="bulletin.days" date="selects.date" basin="basin.id" objs="category.objs"></chart-directive>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

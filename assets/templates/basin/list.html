@@ -1,0 +1,10 @@
+<ul class="nav navbar-nav navbar-right">
+
+  <li
+    ng-repeat="rec in basin.data"
+    ng-class="{'active': rec.id == basin.selects.basin}"
+  >
+    <a href ng-click="basin.changeCurrent(rec)">{{ rec.name }}</a>
+  </li>
+
+</ul>

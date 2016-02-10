@@ -1,0 +1,4 @@
+<div ng-repeat="param in chart.params">
+  <highchart id="{{ 'chart-first-'  + param.id }}" config="param.first"  class="export-chart"></highchart>
+  <highchart id="{{ 'chart-second-' + param.id }}" config="param.second" class="export-chart"></highchart>
+</div>

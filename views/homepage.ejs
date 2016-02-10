@@ -1,0 +1,98 @@
+<div ng-controller="App as app">
+  <!-- Menu -->
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <form class="navbar-form navbar-left" role="search">
+          <input type="text" class="form-control"
+            bs-datepicker
+            data-animation="am-flip-x"
+            min-view="1"
+            date-format="MMMM yyyy"
+            ng-model="selects.date"
+          />      
+        </form>
+      </div>
+
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+        <category-list></category-list>
+
+        <basin-list></basin-list>
+
+      </div>
+    </div>
+  </nav>
+  <!-- /Menu -->
+
+  <!-- Page Content -->
+  <div class="container-fluid" id="container">
+
+    <a class="btn btn-primary btn-lg" href ng-click="app.report()" style="margin-bottom: 10px;">
+      <i class="glyphicon glyphicon-stats"></i> Показать отчет этой категории
+    </a>
+
+    <a class="btn btn-warning btn-lg pull-right" ng-href="{{ '/pdf?date=' + selects.date }}" target="_blank">
+      <i class="glyphicon glyphicon-print"></i> Редактор бюллетени
+    </a>
+
+    <div class="object panel panel-success" ng-repeat="obj in app.data">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          Объект: {{ obj.name }}
+        </h3>
+      </div>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th class="success" rowspan="2">Параметр</th>
+            <th class="success" rowspan="2">Ед.изм</th>
+            <th class="success" rowspan="2">Тип</th>
+            <th class="success" colspan="{{ app.period.colspan[$index] }}" ng-repeat="name in app.period.names">{{name}}</th>
+          </tr>
+          <tr>
+            <th ng-repeat-start="day in [] | range:app.days">{{ day }}</th>
+            <th class="success" ng-if="app.period.isEnd(day)">avg</th>
+            <th class="success" ng-if="app.period.isEnd(day)" ng-repeat-end>sum</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat-start="param in obj.params">
+            <td class="success" rowspan="{{param.withTypes ? 2 : 1}}">{{ param.name }}</td>
+            <td class="success" rowspan="{{param.withTypes ? 2 : 1}}">{{ param.measure }}</td>
+            <td class="success">Факт</td>
+            <td
+              ng-repeat-start="day in [] | range:app.days"
+              ng-dblclick="app.editData(param, day, 'fact')"
+            >
+              {{ param.datas['day'+day].fact.val }}
+            </td>
+            <td class="success" ng-if="app.period.isEnd(day)">
+              {{app.period.calc('avg', day, param.datas, 'fact')}}
+            </th>
+            <td class="success" ng-if="app.period.isEnd(day)" ng-repeat-end>
+              {{app.period.calc('sum', day, param.datas, 'fact')}}
+            </th>
+          </tr>
+          <tr ng-repeat-end ng-if="param.withTypes">
+            <td class="success">Прогноз</td>
+            <td
+              ng-repeat-start="day in [] | range:app.days"
+              ng-dblclick="app.editData(param, day, 'plan')"
+            >
+              {{ param.datas['day'+day].plan.val }}
+            </td>
+            <td class="success" ng-if="app.period.isEnd(day)">
+              {{app.period.calc('avg', day, param.datas, 'plan')}}
+            </th>
+            <td class="success" ng-if="app.period.isEnd(day)" ng-repeat-end>
+              {{app.period.calc('sum', day, param.datas, 'plan')}}
+            </th>
+          </tr>
+        </tbody>
+      </table>    
+    </div>  
+
+    <div class="loader" ng-show="app.loading"><img src="/images/loader.gif"/></div>
+  </div>
+  <!-- /Page Content -->
+</div>

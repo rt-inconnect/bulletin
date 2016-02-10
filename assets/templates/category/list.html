@@ -1,0 +1,10 @@
+<ul class="nav navbar-nav">
+
+  <li
+    ng-repeat="rec in category.data"
+    ng-class="{'active': rec.id == category.selects.category}"
+  >
+    <a href ng-click="category.changeCurrent(rec)">{{ rec.name }}</a>
+  </li>
+
+</ul>

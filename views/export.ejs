@@ -1,0 +1,58 @@
+<script type="text/javascript">
+  var basin = <%- req.param('basin') %>;
+  var category = <%- req.param('category') %>;
+</script>
+
+<div ng-controller="Export as export" class="export">
+  <table class="table table-bordered" width="700">
+    <thead>
+      <tr>
+        <th rowspan="2" width="200">Объект</th>
+        <th rowspan="2" width="100">Параметр</th>
+        <th rowspan="2" width="50">Ед.изм</th>
+        <th rowspan="2" width="50">Тип</th>
+        <th colspan="3" width="150">{{ export.month.first }}</th>
+        <th colspan="3" width="150">{{ export.month.second }}</th>
+      </tr>
+      <tr>
+        <th width="50">I</th>
+        <th width="50">II</th>
+        <th width="50">III</th>
+        <th width="50">I</th>
+        <th width="50">II</th>
+        <th width="50">III</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat-start="obj in export.objs">
+        <td rowspan="{{ obj.rowspan + 1 }}">{{ obj.name }}</td>
+      </tr>
+        <tr ng-repeat-start="param in obj.params">
+          <td rowspan="{{param.paramId.withTypes ? 2 : 1}}">{{ param.paramId.name }}</td>
+          <td rowspan="{{param.paramId.withTypes ? 2 : 1}}">{{ param.paramId.measure }}</td>
+          <td>Факт</td>
+          <td>{{ export.avg('first', param.avg.first.fact, 0) }}</td>
+          <td>{{ export.avg('first', param.avg.first.fact, 1) }}</td>
+          <td>{{ export.avg('first', param.avg.first.fact, 2) }}</td>
+          <td>{{ export.avg('second', param.avg.second.fact, 0) }}</td>
+          <td>{{ export.avg('second', param.avg.second.fact, 1) }}</td>
+          <td>{{ export.avg('second', param.avg.second.fact, 2) }}</td>
+        </tr>
+        <tr ng-repeat-end ng-if="param.paramId.withTypes">
+          <td>Прогноз</td>
+          <td>{{ export.avg('first', param.avg.first.plan, 0) }}</td>
+          <td>{{ export.avg('first', param.avg.first.plan, 1) }}</td>
+          <td>{{ export.avg('first', param.avg.first.plan, 2) }}</td>
+          <td>{{ export.avg('second', param.avg.second.plan, 0) }}</td>
+          <td>{{ export.avg('second', param.avg.second.plan, 1) }}</td>
+          <td>{{ export.avg('second', param.avg.second.plan, 2) }}</td>
+        </tr>
+      <tr ng-repeat-end ng-hide="true"></tr>
+    </tbody>
+  </table>
+
+  <div ng-repeat="param in export.params">
+    <highchart id="{{ 'chart-first-'  + param.id }}" config="param.first"  class="export-chart"></highchart>
+    <highchart id="{{ 'chart-second-' + param.id }}" config="param.second" class="export-chart"></highchart>
+  </div>
+</div>

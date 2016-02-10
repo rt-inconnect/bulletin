@@ -1,0 +1,166 @@
+body {
+  -webkit-print-color-adjust:exact;
+}
+.table td {
+  font-size: 0.8em;
+  line-height: 1;
+}
+.table th {
+  vertical-align: middle!important;
+  text-align: center;
+}
+
+#container {
+  position: relative;
+}
+
+.chart .modal-header {
+  padding: 10px 15px;
+}
+.chart .modal-title {
+  font-size: 11px;
+  line-height: 1;
+}
+.loader {
+  position: absolute;
+  top: 0;
+  left: 15px;
+  right: 15px;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.6);  
+}
+.loader img {
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(33, 150, 243, 0.8);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(33, 150, 243, 1);
+}
+::-webkit-scrollbar-track {
+  background-color: rgba(50,50,50,0.05);
+}
+
+
+/* Bulletin */
+.controls {
+  width: calc(100% - 210mm);
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.bulletin {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 12pt;
+  color: #000;
+  margin: 5px;
+
+  position: fixed;
+  right: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  bottom: 0;
+  top: 0;
+  width: 210mm;
+}
+.bulletin-page-cover {
+  height: 280mm;
+  position: relative;
+  page-break-after: always;
+}
+.bulletin-page-cover h2, .bulletin-page-cover h3 {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 80px;
+}
+.bulletin-page-cover h2 {
+  font-size: 26pt;
+}
+.bulletin-page-cover h3 {
+  font-size: 18pt;
+}
+.bulletin-page-cover .bulletin-page-footer {
+  text-align: center;
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;  
+}
+.bulletin-page-cover .bulletin-page-footer img {
+  height: 16.5mm;
+  margin-right: 60px;  
+}
+.bulletin-basin-content {
+  padding: 5px 50px;
+}
+.bulletin-basin-content h2 {
+  font-size: 20pt;
+  font-weight: bold;
+  text-align: center;
+}
+.bulletin-basin-content h4 {
+  text-align: center;
+  font-weight: bold;
+}
+.bulletin .category-header {
+  margin-bottom: 10px;
+}
+.bulletin .category-name {
+  text-align: center;
+  font-size: 20pt;
+  font-weight: bold;
+  vertical-align: middle;
+  padding: 20px;
+  color: #fff!important;
+  background-color: #2196f3!important;  
+}
+.bulletin .category-img {
+  height: 89px;
+}
+.bulletin .category-img-bg, .bulletin .category-img img {
+  height: 100%;
+}
+
+
+.export {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 12pt;
+  color: #000;
+  margin: 5px;
+
+  width: 210mm;
+}
+
+@media print {
+  .controls {
+    display: none;
+  }
+  .bulletin  {
+    margin: 0;
+    position: inherit;
+    overflow: auto;
+  }
+  .export  {
+    margin: 0;
+  }
+}
+
+.export-chart {
+  float: left;
+  width: 50%;
+}

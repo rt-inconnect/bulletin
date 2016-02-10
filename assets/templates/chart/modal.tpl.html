@@ -1,0 +1,43 @@
+<div class="modal top am-fade-and-scale chart" tabindex="-1" role="dialog" style="display: block;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="$hide()">×</button>
+        <h4 class="modal-title">{{ app.selects.obj.name }}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="btn-group-vertical btn-group-xs">
+          <a href class="btn"
+            ng-repeat="param in app.selects.obj.params"
+            ng-click="app.changeChartParam(param)"
+            ng-class="{
+              'btn-primary': param.id == app.selects.param.id,
+              'btn-default': param.id != app.selects.param.id
+            }"
+          >
+            {{param.name}}
+          </a>
+        </div>
+
+        <linechart data="app.chart.data" options="app.chart.options" height="350"></linechart>
+
+        <div class="btn-group btn-group-xs btn-group-justified" role="group">
+          <a href class="btn"
+            ng-repeat="type in app.chartTypes"
+            ng-click="app.changeChartType(type)"
+            ng-class="{
+              'btn-primary': type.code == app.selects.chart,
+              'btn-default': type.code != app.selects.chart
+            }"
+          >
+            {{type.name}}
+          </a>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="$hide()">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
